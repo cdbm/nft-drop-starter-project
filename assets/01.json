@@ -1,11 +1,11 @@
 {
-    "name": "Rei Ayanami",
+    "name": "Shinji Ikari",
     "symbol": "",
-    "image": "00.png",
+    "image": "01.png",
     "properties": {
         "files": [
             {
-                "uri": "00.png",
+                "uri": "01.png",
                 "type": "image/png"
             }
         ],

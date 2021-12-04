@@ -1,11 +1,11 @@
 {
-    "name": "Rei Ayanami",
+    "name": "Asuka Langley Soryu",
     "symbol": "",
-    "image": "00.png",
+    "image": "02.png",
     "properties": {
         "files": [
             {
-                "uri": "00.png",
+                "uri": "02.png",
                 "type": "image/png"
             }
         ],
