@@ -1,0 +1,19 @@
+{
+    "name": "Misato Katsuragi",
+    "symbol": "",
+    "image": "03.png",
+    "properties": {
+        "files": [
+            {
+                "uri": "03.png",
+                "type": "image/png"
+            }
+        ],
+        "creators": [
+            {
+                "address": "9WqMF4H9QefufjmuqibMDnsgV9Jv116HsFx6KHFVvWN4",
+                "share": 100
+            }
+        ]
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "name": "Kaworu Nagisa",
+    "symbol": "",
+    "image": "04.png",
+    "properties": {
+        "files": [
+            {
+                "uri": "04.png",
+                "type": "image/png"
+            }
+        ],
+        "creators": [
+            {
+                "address": "9WqMF4H9QefufjmuqibMDnsgV9Jv116HsFx6KHFVvWN4",
+                "share": 100
+            }
+        ]
+    }
+}
