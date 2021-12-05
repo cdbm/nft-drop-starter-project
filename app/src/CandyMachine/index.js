@@ -30,6 +30,9 @@ const CandyMachine = ({ walletAddress }) => {
   const [machineStats, setMachineStats] = useState(null);
   const [mints, setMints] = useState([]);
 
+  const [isMinting, setisMinting] = useState(false);
+  const [isLoadingMints, setIsloadingMints] = useState(false);
+
   // Actions
   useEffect(() => {
     getCandyMachineState();
@@ -83,6 +86,8 @@ const CandyMachine = ({ walletAddress }) => {
       goLiveDateTimeString
     });
 
+    setIsloadingMints(true);
+
     const data = await fetchHashTable(
       process.env.REACT_APP_CANDY_MACHINE_ID,
       true
@@ -99,6 +104,8 @@ const CandyMachine = ({ walletAddress }) => {
         }
       }
     }
+
+    setIsloadingMints(false);
   };
 
 
@@ -186,6 +193,7 @@ const CandyMachine = ({ walletAddress }) => {
 
   const mintToken = async () => {
     try {
+      setisMinting(true);
       const mint = web3.Keypair.generate();
       const token = await getTokenWallet(
         walletAddress.publicKey,
@@ -270,6 +278,8 @@ const CandyMachine = ({ walletAddress }) => {
             const { result } = notification;
             if (!result.err) {
               console.log('NFT Minted!');
+              setisMinting(false);
+              await getCandyMachineState();
             }
           }
         },
@@ -277,6 +287,8 @@ const CandyMachine = ({ walletAddress }) => {
       );
     } catch (error) {
       let message = error.msg || 'Minting failed! Please try again!';
+
+      setisMinting(false);
 
       if (!error.msg) {
         if (error.message.indexOf('0x138')) {
@@ -345,10 +357,10 @@ const CandyMachine = ({ walletAddress }) => {
       <div className="machine-container">
         <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>
         <p>{`Items Minted: ${machineStats.itemsRedeemed} / ${machineStats.itemsAvailable}`}</p>
-        <button className="cta-button mint-button" onClick={mintToken}>
+        <button className="cta-button mint-button" disabled={isMinting} onClick={mintToken}>
           Mint NFT
         </button>
-
+        {isLoadingMints && <p>LOADING MINTS...</p>}
         {mints.length > 0 && renderMintedItems()}
       </div>
     )
