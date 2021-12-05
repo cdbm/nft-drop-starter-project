@@ -28,6 +28,7 @@ const MAX_CREATOR_LEN = 32 + 1 + 1;
 const CandyMachine = ({ walletAddress }) => {
 
   const [machineStats, setMachineStats] = useState(null);
+  const [mints, setMints] = useState([]);
 
   // Actions
   useEffect(() => {
@@ -59,7 +60,6 @@ const CandyMachine = ({ walletAddress }) => {
       process.env.REACT_APP_CANDY_MACHINE_ID
     );
 
-    console.log(candyMachine)
     const itemsAvailable = candyMachine.data.itemsAvailable.toNumber();
     const itemsRedeemed = candyMachine.itemsRedeemed.toNumber();
     const itemsRemaining = itemsAvailable - itemsRedeemed;
@@ -82,6 +82,23 @@ const CandyMachine = ({ walletAddress }) => {
       goLiveData,
       goLiveDateTimeString
     });
+
+    const data = await fetchHashTable(
+      process.env.REACT_APP_CANDY_MACHINE_ID,
+      true
+    );
+
+    if (data.length !== 0) {
+      for (const mint of data) {
+        const response = await fetch(mint.data.uri);
+        const parse = await response.json();
+        console.log("Past minted NFT!", mint);
+
+        if (!mints.find((mint) => mint === parse.image)) {
+          setMints((prevState) => [...prevState, parse.image]);
+        }
+      }
+    }
   };
 
 
@@ -310,14 +327,31 @@ const CandyMachine = ({ walletAddress }) => {
     });
   };
 
-  return (
-    <div className="machine-container">
-      <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>
-      <p>{`Items Minted: ${machineStats.itemsRedeemed} / ${machineStats.itemsAvailable}`}</p>
-      <button className="cta-button mint-button" onClick={mintToken}>
-        Mint NFT
-      </button>
+  const renderMintedItems = () => (
+    <div className="gif-container">
+      <p className="sub-text">Minted Items ✨</p>
+      <div className="gif-grid">
+        {mints.map((mint) => (
+          <div className="gif-item" key={mint}>
+            <img src={mint} alt={`Minted NFT ${mint}`} />
+          </div>
+        ))}
+      </div>
     </div>
+  );
+
+  return (
+    machineStats && (
+      <div className="machine-container">
+        <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>
+        <p>{`Items Minted: ${machineStats.itemsRedeemed} / ${machineStats.itemsAvailable}`}</p>
+        <button className="cta-button mint-button" onClick={mintToken}>
+          Mint NFT
+        </button>
+
+        {mints.length > 0 && renderMintedItems()}
+      </div>
+    )
   );
 };
 
